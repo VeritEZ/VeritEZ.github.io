@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 type IconName = 'web' | 'person' | 'signal' | 'spark' | 'pin' | 'shield' | 'screen' | 'link' | 'rocket'
 
@@ -42,7 +42,7 @@ const faqs = [
 ]
 
 function Wordmark({ className = '' }: { className?: string }) {
-  return <img className={`wordmark ${className}`} src="/veritez-wordmark.svg" alt="VeritEZ" />
+  return <img className={`wordmark ${className}`} src="/veritez-wordmark.svg" width="348" height="104" alt="VeritEZ" />
 }
 
 function ButtonLink({ href, children }: { href: string; children: ReactNode }) {
@@ -73,37 +73,18 @@ function HexScene() {
 }
 
 function NfcShowcase() {
-  const [phase, setPhase] = useState<'home' | 'approach' | 'scan' | 'profile' | 'return'>('home')
-  useEffect(() => {
-    const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const sequence = [
-      ['home', 2000], ['approach', 1600], ['scan', 1800], ['profile', 4200], ['return', 1600],
-    ] as const
-    let timer: ReturnType<typeof setTimeout>
-    function play(index = 0) {
-      if (motion.matches) { setPhase('profile'); return }
-      const [next, duration] = sequence[index]
-      setPhase(next)
-      timer = setTimeout(() => play((index + 1) % sequence.length), duration)
-    }
-    function restart() { clearTimeout(timer); play() }
-    play()
-    motion.addEventListener('change', restart)
-    return () => { clearTimeout(timer); motion.removeEventListener('change', restart) }
-  }, [])
-  const profileVisible = phase === 'profile' || phase === 'return'
-  return <div className="nfc-stage" data-phase={phase} role="img" aria-label="Animated NFC demonstration: a card approaches a phone’s home screen, the phone detects NFC, then opens John Doe’s contact profile.">
+  return <div className="nfc-stage" data-phase="home" role="img" aria-label="Animated NFC demonstration: a card approaches a phone’s home screen, the phone detects NFC, then opens John Doe’s contact profile.">
     <div className="nfc-stage__halo" />
-    <div className="nfc-card" aria-hidden="true"><div className="nfc-card__top"><Wordmark/><span>01 / 04</span></div><div className="nfc-card__mark"><span className="nfc-card__hex"><Icon name="signal" size={17}/></span><span className="nfc-card__tagline">TAP INTO OPPORTUNITY</span></div><div className="nfc-card__bottom"><span>VERITEZ DIGITAL ID</span><span>STUDIO EDITION</span></div></div>
+    <div className="nfc-card" aria-hidden="true"><div className="nfc-card__top"><Wordmark/><span className="nfc-card__signal"><Icon name="signal" size={20}/></span></div><div className="nfc-card__mark"><span className="nfc-card__tagline">TAP INTO OPPORTUNITY</span></div><div className="nfc-card__bottom"><span>VERITEZ DIGITAL ID</span><span>01</span></div></div>
     <div className="nfc-phone" aria-hidden="true"><div className="nfc-phone__speaker"/><div className="nfc-phone__screen">
       <div className="phone-status"><span>9:41</span><span>▮▮▮ <i/></span></div>
-      <div className="phone-home" hidden={profileVisible}>
+      <div className="phone-home">
         <div className="phone-clock">9:41<small>Monday, 12 October</small></div>
         <div className="phone-apps">{(['web', 'person', 'pin', 'screen', 'link', 'spark'] as IconName[]).map((name) => <span key={name}><Icon name={name} size={18}/></span>)}</div>
         <div className="phone-dock"><Icon name="person" size={17}/><Icon name="web" size={17}/><Icon name="link" size={17}/></div>
       </div>
-      <div className="phone-nfc" hidden={phase !== 'scan'}><span className="phone-nfc__icon"><Icon name="signal" size={26}/></span><b>NFC detected</b><small>Opening contact…</small><span className="phone-nfc__progress"/></div>
-      <div className="phone-profile" hidden={!profileVisible}><div className="profile-avatar">J</div><b>John Doe</b><span>Digital solutions · VeritEZ</span><i>Save contact</i><small>Portfolio&nbsp;&nbsp; LinkedIn&nbsp;&nbsp; Email</small><div className="phone-profile__connected"><Icon name="signal" size={12}/>Connected</div></div>
+      <div className="phone-nfc" hidden><span className="phone-nfc__icon"><Icon name="signal" size={26}/></span><b>NFC detected</b><small>Opening contact…</small><span className="phone-nfc__progress"/></div>
+      <div className="phone-profile" hidden><div className="profile-avatar">J</div><b>John Doe</b><span>Digital solutions · VeritEZ</span><i>Save contact</i><small>Portfolio&nbsp;&nbsp; LinkedIn&nbsp;&nbsp; Email</small><div className="phone-profile__connected"><Icon name="signal" size={12}/>Connected</div></div>
       <div className="phone-home-bar"/>
     </div></div>
     <div className="nfc-rings" aria-hidden="true"><span/><span/><span/></div>
@@ -112,66 +93,16 @@ function NfcShowcase() {
 }
 
 function App() {
-  const navRef = useRef<HTMLElement>(null)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [openFaq, setOpenFaq] = useState<number | null>(null)
-  const [formNotice, setFormNotice] = useState('')
-
-  useEffect(() => {
-    const sections = [...document.querySelectorAll<HTMLElement>('[data-theme]')]
-    const themeObserver = new IntersectionObserver((entries) => {
-      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
-      if (visible) document.documentElement.dataset.theme = (visible.target as HTMLElement).dataset.theme ?? 'emerald'
-    }, { rootMargin: '-30% 0px -45% 0px', threshold: [0, 0.15, 0.35, 0.6] })
-    sections.forEach((section) => themeObserver.observe(section))
-
-    const revealObserver = new IntersectionObserver((entries) => entries.forEach((entry) => {
-      if (entry.isIntersecting) { entry.target.classList.add('is-visible'); revealObserver.unobserve(entry.target) }
-    }), { threshold: 0.1 })
-    document.querySelectorAll('.reveal').forEach((element) => revealObserver.observe(element))
-
-    let frame = 0
-    const onScroll = () => {
-      if (window.innerWidth <= 760 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-      if (frame) return
-      frame = requestAnimationFrame(() => {
-        frame = 0
-        document.documentElement.style.setProperty('--scroll-y', `${window.scrollY * 0.12}px`)
-      })
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => { themeObserver.disconnect(); revealObserver.disconnect(); window.removeEventListener('scroll', onScroll); if (frame) cancelAnimationFrame(frame) }
-  }, [])
-
-  useEffect(() => {
-    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') setMenuOpen(false) }
-    window.addEventListener('keydown', closeOnEscape)
-    return () => window.removeEventListener('keydown', closeOnEscape)
-  }, [])
-
-  function handleContact(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    const form = new FormData(event.currentTarget)
-    const name = String(form.get('name') ?? '').trim()
-    const email = String(form.get('email') ?? '').trim()
-    const service = String(form.get('service') ?? '').trim()
-    const details = String(form.get('details') ?? '').trim()
-    const subject = encodeURIComponent(`VeritEZ project inquiry: ${service || 'New project'}`)
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nService: ${service}\n\nProject details:\n${details}`)
-    setFormNotice('Your email application should open with this draft. Review it and press Send there to contact VeritEZ.')
-    window.location.href = `mailto:mohammedayanmahmood@gmail.com?subject=${subject}&body=${body}`
-  }
-
   return <div className="site-shell">
     <a className="skip-link" href="#main">Skip to content</a>
     <HexScene />
     <header className="site-header">
-      <nav className={`nav glass-panel ${menuOpen ? 'nav--open' : ''}`} ref={navRef} aria-label="Main navigation">
+      <nav className="nav glass-panel" aria-label="Main navigation">
         <a className="nav__brand" href="#top" aria-label="VeritEZ home"><Wordmark/></a>
-        <button className="nav__toggle" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={menuOpen} aria-controls="nav-links" onClick={() => setMenuOpen(!menuOpen)}><span/><span/></button>
+        <button className="nav__toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="nav-links"><span/><span/></button>
         <div className="nav__links" id="nav-links">
-          {nav.map(([label, href]) => <a key={href} href={href} onClick={() => setMenuOpen(false)}>{label}</a>)}
-          <a className="nav__cta" href="#contact" onClick={() => setMenuOpen(false)}>Let’s talk</a>
+          {nav.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
+          <a className="nav__cta" href="#contact">Let’s talk</a>
         </div>
       </nav>
     </header>
@@ -253,17 +184,17 @@ function App() {
       </section>
 
       <section className="faq section" id="faq" data-theme="blue">
-        <div className="content-width faq__layout"><div className="faq__intro reveal"><h2>Common questions.</h2><p>Details about our websites, NFC products, and how to get in touch.</p></div><div className="faq-list reveal">{faqs.map(([question, answer], i) => <article className={`faq-item ${openFaq === i ? 'is-open' : ''}`} key={question}><h3><button type="button" aria-expanded={openFaq === i} aria-controls={`faq-answer-${i}`} onClick={() => setOpenFaq(openFaq === i ? null : i)}><span>{question}</span><i>{openFaq === i ? '−' : '+'}</i></button></h3><div className="faq-item__answer" id={`faq-answer-${i}`} hidden={openFaq !== i}><p>{answer}</p></div></article>)}</div></div>
+        <div className="content-width faq__layout"><div className="faq__intro reveal"><h2>Common questions.</h2><p>Details about our websites, NFC products, and how to get in touch.</p></div><div className="faq-list reveal">{faqs.map(([question, answer], i) => <article className="faq-item" key={question}><h3><button type="button" aria-expanded="false" aria-controls={`faq-answer-${i}`}><span>{question}</span><i aria-hidden="true">+</i></button></h3><div className="faq-item__answer" id={`faq-answer-${i}`} hidden><p>{answer}</p></div></article>)}</div></div>
       </section>
 
       <section className="contact section" id="contact" data-theme="emerald">
         <div className="content-width contact__layout"><div className="contact__copy reveal"><h2>Tell us about<br/><span>your project.</span></h2><p>Use the form to prepare an email with your project details. You can review it before sending.</p><div className="contact__direct"><div><a href="mailto:mohammedayanmahmood@gmail.com">mohammedayanmahmood@gmail.com</a></div></div><div className="contact__note"><i/>Your message opens in your email app.</div></div>
-          <form className="contact-form glass-panel reveal" onSubmit={handleContact}>
+          <form className="contact-form glass-panel reveal" action="mailto:mohammedayanmahmood@gmail.com" method="post" encType="text/plain">
             <div className="form-row"><label>Your name<input name="name" autoComplete="name" placeholder="How should we address you?" required/></label><label>Email address<input name="email" type="email" autoComplete="email" placeholder="you@example.com" required/></label></div>
             <label>What can we help with?<select name="service" defaultValue="" required><option value="" disabled>Choose a service</option><option>Business website</option><option>Personal website</option><option>NFC products</option><option>Career support (planned)</option><option>Something else</option></select></label>
             <label>A little about your project<textarea name="details" rows={4} placeholder="What are you hoping to create?" required/></label>
             <div className="contact-form__bottom"><button className="button" type="submit">Open email draft</button><small>No information is submitted or stored by this form.</small></div>
-            <p className="form-notice" role="status" aria-live="polite">{formNotice}</p>
+            <p className="form-notice" role="status" aria-live="polite"/>
           </form>
         </div>
       </section>
