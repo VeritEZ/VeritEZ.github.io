@@ -50,7 +50,7 @@ function ButtonLink({ href, children }: { href: string; children: ReactNode }) {
 }
 
 function MockBrowser({ type }: { type: 'restaurant' | 'studio' | 'portfolio' }) {
-  const labels = { restaurant: ['SALT & CITRUS', 'A little brighter. A little fresher.', 'Seasonal plates · Good company'], studio: ['NORTHLINE STUDIO', 'Built around what matters.', 'Thoughtful service for modern spaces'], portfolio: ['AYAAN MAHMOOD', 'Designing what comes next.', 'Selected work · About · Contact'] }
+  const labels = { restaurant: ['SALT & CITRUS', 'A little brighter. A little fresher.', 'Seasonal plates · Good company'], studio: ['NORTHLINE STUDIO', 'Built around what matters.', 'Thoughtful service for modern spaces'], portfolio: ['JOHN DOE', 'Designing what comes next.', 'Selected work · About · Contact'] }
   const [brand, title, sub] = labels[type]
   return <div className={`browser browser--${type}`} role="img" aria-label={`${type} website design concept preview`}>
     <div className="browser__chrome"><i/><i/><i/><span>veritez.design / concept</span><b>•••</b></div>
@@ -75,7 +75,7 @@ function HexScene() {
 function NfcShowcase() {
   return <div className="nfc-stage" tabIndex={0} aria-label="NFC card and phone preview. Hover or focus to see the connection animation.">
     <div className="nfc-stage__halo" />
-    <div className="nfc-card"><div className="nfc-card__top"><Wordmark/><span>01 / 04</span></div><div className="nfc-card__mark"><span className="nfc-card__hex"><Icon name="signal" size={17}/></span><span>Tap into<br/>opportunity.</span></div><div className="nfc-card__bottom"><span>VERITEZ DIGITAL ID</span><span>STUDIO EDITION</span></div></div>
+    <div className="nfc-card"><div className="nfc-card__top"><Wordmark/><span>01 / 04</span></div><div className="nfc-card__mark"><span className="nfc-card__hex"><Icon name="signal" size={17}/></span><span>Digital<br/>business card</span></div><div className="nfc-card__bottom"><span>VERITEZ DIGITAL ID</span><span>STUDIO EDITION</span></div></div>
     <div className="nfc-phone"><div className="nfc-phone__speaker"/><div className="nfc-phone__screen"><div className="profile-avatar">J</div><b>John Doe</b><span>Digital solutions · VeritEZ</span><i>Save contact</i><small>Portfolio&nbsp;&nbsp; LinkedIn&nbsp;&nbsp; Email</small></div></div>
     <div className="nfc-rings"><span/><span/><span/></div>
     <div className="nfc-caption">Hover or focus to preview · no NFC hardware is activated</div>
@@ -151,10 +151,9 @@ function App() {
       <section className="hero section" id="top" data-theme="emerald">
         <div className="hero__inner content-width">
           <div className="hero__copy">
-            <h1 className="reveal">Show what you do<br/><span>and stay in touch</span></h1>
+            <h1 className="reveal">Your next opportunity<br/><span>starts here.</span></h1>
             <p className="hero__lead reveal">Websites and NFC products that help people find your work and contact you.</p>
             <div className="hero__actions reveal"><ButtonLink href="#solutions">Explore solutions</ButtonLink></div>
-            <div className="hero__tagline reveal">Tap into opportunity</div>
           </div>
           <div className="hero__visual" aria-label="NFC card and phone interaction preview"><NfcShowcase/></div>
         </div>
@@ -242,8 +241,8 @@ function App() {
     </main>
 
     <footer className="footer" data-theme="emerald">
-      <div className="content-width footer__top"><a href="#top" className="footer__brand"><Wordmark/><span>Tap into opportunity</span></a><div className="footer__nav"><div><a href="#solutions">Solutions</a><a href="#products">NFC products</a><a href="#how-it-works">How it works</a></div><div><a href="#contact">Contact</a><a href="mailto:mohammedayanmahmood@gmail.com">Email VeritEZ</a><a href="#faq">FAQs</a></div><div><a href="/privacy.html">Privacy notice</a></div></div></div>
-      <div className="content-width footer__bottom"><span>© {new Date().getFullYear()} VeritEZ. All rights reserved.</span><span>WEB <i/> IDENTITY <i/> CONNECTION</span></div>
+      <div className="content-width footer__top"><a href="#top" className="footer__brand"><Wordmark/></a><div className="footer__nav"><div><a href="#solutions">Solutions</a><a href="#products">NFC products</a><a href="#how-it-works">How it works</a></div><div><a href="#contact">Contact</a><a href="mailto:mohammedayanmahmood@gmail.com">Email VeritEZ</a><a href="#faq">FAQs</a></div><div><a href="/privacy.html">Privacy notice</a></div></div></div>
+      <div className="content-width footer__bottom"><span>© {new Date().getFullYear()} VeritEZ. All rights reserved.</span></div>
     </footer>
   </div>
 }

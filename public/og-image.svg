@@ -10,9 +10,8 @@
     <path d="M951 207h140l70 121-70 121H951l-70-121 70-121Z" stroke-opacity=".22"/>
   </g>
   <path d="M86 122h28v28H86z" fill="none" stroke="url(#g)" stroke-width="1.5" transform="rotate(30 100 136)"/>
-  <text x="80" y="322" fill="#f5f7f6" font-family="Arial,sans-serif" font-size="79" font-weight="600" letter-spacing="-5">Show what you do</text>
-  <text x="80" y="410" fill="#a7b3b0" font-family="Arial,sans-serif" font-size="79" font-weight="600" letter-spacing="-5">and stay in touch</text>
+  <text x="80" y="322" fill="#f5f7f6" font-family="Arial,sans-serif" font-size="79" font-weight="600" letter-spacing="-5">Your next opportunity</text>
+  <text x="80" y="410" fill="#a7b3b0" font-family="Arial,sans-serif" font-size="79" font-weight="600" letter-spacing="-5">starts here.</text>
   <text x="86" y="486" fill="#a7b3b0" font-family="Arial,sans-serif" font-size="21">Websites · NFC products</text>
   <text x="86" y="565" fill="#00e7a3" font-family="Arial,sans-serif" font-size="22" font-weight="600" letter-spacing="2">VeritEZ</text>
-  <text x="186" y="565" fill="#87958f" font-family="Arial,sans-serif" font-size="15" letter-spacing="2">Tap into opportunity</text>
 </svg>
