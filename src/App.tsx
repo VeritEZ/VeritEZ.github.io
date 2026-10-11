@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
-import { LiquidGlass } from 'vitrio/react'
 
 type IconName = 'web' | 'person' | 'signal' | 'spark' | 'pin' | 'shield' | 'screen' | 'link' | 'rocket'
 
@@ -86,28 +85,10 @@ function NfcShowcase() {
 }
 
 function App() {
-  const sceneRef = useRef<HTMLDivElement>(null)
   const navRef = useRef<HTMLElement>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [formNotice, setFormNotice] = useState('')
-  const [glassRect, setGlassRect] = useState<{ x: number; y: number; width: number; height: number } | null>(null)
-
-  useEffect(() => {
-    const measure = () => {
-      const navElement = navRef.current
-      if (!navElement || window.innerWidth <= 760 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setGlassRect(null); return }
-      const rect = navElement.getBoundingClientRect()
-      setGlassRect({ x: rect.left, y: rect.top, width: rect.width, height: rect.height })
-    }
-    measure()
-    const observer = navRef.current ? new ResizeObserver(measure) : null
-    if (navRef.current && observer) observer.observe(navRef.current)
-    window.addEventListener('resize', measure)
-    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
-    motionPreference.addEventListener('change', measure)
-    return () => { observer?.disconnect(); window.removeEventListener('resize', measure); motionPreference.removeEventListener('change', measure) }
-  }, [])
 
   useEffect(() => {
     const sections = [...document.querySelectorAll<HTMLElement>('[data-theme]')]
@@ -156,10 +137,8 @@ function App() {
 
   return <div className="site-shell">
     <a className="skip-link" href="#main">Skip to content</a>
-    <div className="glass-sampling-scene" ref={sceneRef} aria-hidden="true" />
     <HexScene />
     <header className="site-header">
-      {glassRect && <LiquidGlass background={sceneRef} width={glassRect.width} height={glassRect.height} radius={999} scale={18} chroma={0.025} x={glassRect.x} y={glassRect.y} zIndex={30} draggable={false} />}
       <nav className={`nav glass-panel ${menuOpen ? 'nav--open' : ''}`} ref={navRef} aria-label="Main navigation">
         <a className="nav__brand" href="#top" aria-label="VeritEZ home"><Wordmark/></a>
         <button className="nav__toggle" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={menuOpen} aria-controls="nav-links" onClick={() => setMenuOpen(!menuOpen)}><span/><span/></button>
