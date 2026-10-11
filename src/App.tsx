@@ -64,11 +64,22 @@ function MockBrowser({ type }: { type: 'restaurant' | 'studio' | 'portfolio' }) 
 
 function HexScene() {
   return <div className="hex-scene" aria-hidden="true">
-    <div className="hex-scene__grid" />
-    <div className="hex hex--a"><span /></div><div className="hex hex--b"><span /></div>
-    <div className="hex hex--c"><span /></div><div className="hex hex--d"><span /></div>
-    <div className="hex-orbit hex-orbit--one"/><div className="hex-orbit hex-orbit--two"/>
-    <div className="hex-scene__beam"/>
+    <svg className="honeycomb" width="100%" height="100%" focusable="false">
+      <defs>
+        <pattern id="honeycomb-cells" width="144" height="84" patternUnits="userSpaceOnUse">
+          <path d="M24 0H72L96 42L72 84H24L0 42ZM96 42H144" fill="none" stroke="currentColor" strokeWidth=".8"/>
+        </pattern>
+        <radialGradient id="honeycomb-opacity" cx="88%" cy="24%" r="95%">
+          <stop offset="0" stopColor="white" stopOpacity=".9"/>
+          <stop offset=".48" stopColor="white" stopOpacity=".4"/>
+          <stop offset="1" stopColor="white" stopOpacity=".035"/>
+        </radialGradient>
+        <mask id="honeycomb-fade">
+          <rect width="100%" height="100%" fill="url(#honeycomb-opacity)"/>
+        </mask>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#honeycomb-cells)" mask="url(#honeycomb-fade)"/>
+    </svg>
   </div>
 }
 
@@ -142,13 +153,13 @@ function App() {
       <section className="business section" id="business" data-theme="gold">
         <div className="content-width showcase showcase--business">
           <div className="showcase__copy reveal"><h2>A website that explains<br/><span>your business.</span></h2><p>Give customers a clear place to see your services, find key details, and get in touch.</p><ul className="feature-list"><li><Icon name="screen" size={18}/> Works on every screen</li><li><Icon name="pin" size={18}/> Organized around your business</li><li><Icon name="spark" size={18}/> Clear content and navigation</li></ul></div>
-          <div className="showcase__art reveal"><div className="browser-stack"><MockBrowser type="restaurant"/><div className="browser-stack__back"><MockBrowser type="studio"/></div></div><div className="concept-note"><span>CONCEPT STUDY / 01</span><i/>Illustrative design direction</div><div className="showcase-orbit"/></div>
+          <div className="showcase__art reveal"><div className="browser-stack"><MockBrowser type="restaurant"/><div className="browser-stack__back"><MockBrowser type="studio"/></div></div><div className="showcase-orbit"/></div>
         </div>
       </section>
 
       <section className="personal section" id="personal" data-theme="blue">
         <div className="content-width showcase showcase--personal">
-          <div className="showcase__art reveal"><div className="portfolio-orbit"><span/><span/><span/></div><div className="portfolio-window"><MockBrowser type="portfolio"/><div className="portfolio-window__badge"><Icon name="person" size={18}/><span>YOUR WORK<br/><b>YOUR STORY</b></span></div></div><div className="concept-note"><span>CONCEPT STUDY / 02</span><i/>Personal portfolio direction</div></div>
+          <div className="showcase__art reveal"><div className="portfolio-orbit"><span/><span/><span/></div><div className="portfolio-window"><MockBrowser type="portfolio"/><div className="portfolio-window__badge"><Icon name="person" size={18}/><span>YOUR WORK<br/><b>YOUR STORY</b></span></div></div></div>
           <div className="showcase__copy reveal"><h2>Your work in<br/><span>one place.</span></h2><p>Share your projects, experience, and contact details on a site that feels like yours.</p><div className="audience-chips"><span>Students</span><span>Researchers</span><span>Freelancers</span><span>Professionals</span><span>Job seekers</span></div></div>
         </div>
       </section>
@@ -201,7 +212,7 @@ function App() {
     </main>
 
     <footer className="footer" data-theme="emerald">
-      <div className="content-width footer__top"><a href="#top" className="footer__brand"><Wordmark/></a><div className="footer__nav"><div><a href="#solutions">Solutions</a><a href="#products">NFC products</a><a href="#how-it-works">How it works</a></div><div><a href="#contact">Contact</a><a href="mailto:mohammedayanmahmood@gmail.com">Email VeritEZ</a><a href="#faq">FAQs</a></div><div><a href="/privacy.html">Privacy notice</a></div></div></div>
+      <div className="content-width footer__top"><a href="#top" className="footer__brand"><Wordmark/><span className="footer__tagline">TAP INTO OPPORTUNITY.</span></a><div className="footer__nav"><div><a href="#solutions">Solutions</a><a href="#products">NFC products</a><a href="#how-it-works">How it works</a></div><div><a href="#contact">Contact</a><a href="mailto:mohammedayanmahmood@gmail.com">Email VeritEZ</a><a href="#faq">FAQs</a></div><div><a href="/privacy.html">Privacy notice</a></div></div></div>
       <div className="content-width footer__bottom"><span>© {new Date().getFullYear()} VeritEZ. All rights reserved.</span></div>
     </footer>
   </div>

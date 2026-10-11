@@ -1,6 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs><linearGradient id="g" x1="8" y1="5" x2="55" y2="60"><stop stop-color="#8dffda"/><stop offset="1" stop-color="#00b77e"/></linearGradient></defs>
-  <path d="M20 5h24l15 27-15 27H20L5 32 20 5Z" fill="#07110e" stroke="url(#g)" stroke-width="2"/>
-  <path d="M23 17h18v3L30 34h11v4H23v-3l11-14H23v-4Z" fill="url(#g)"/>
-  <path d="M19 45h26" stroke="#00e7a3" stroke-opacity=".45"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">VeritEZ VEZ monogram</title>
+  <defs>
+    <linearGradient id="emerald" x1="330.364" y1="589.813" x2="330.364" y2="624.86" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#70FFD5"/>
+      <stop offset=".5" stop-color="#00E7A3"/>
+      <stop offset="1" stop-color="#00A872"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="12" fill="#080B0B"/>
+  <path transform="translate(5.5 16) scale(.58 .96) translate(-227.164 -591.591)" fill="#B7B7B7" d="M243.257 624.804C241.827 624.804 240.536 624.478 239.385 623.825C238.266 623.141 237.442 622.083 236.913 620.653L227.164 591.591H234.581L242.464 617.901C242.526 618.118 242.62 618.274 242.744 618.367C242.899 618.46 243.07 618.507 243.257 618.507C243.444 618.507 243.599 618.46 243.724 618.367C243.879 618.274 243.988 618.118 244.05 617.901L252.213 591.591H259.304L249.601 620.606C249.104 622.006 248.279 623.063 247.129 623.778C245.978 624.462 244.688 624.804 243.257 624.804Z"/>
+  <path transform="translate(26.2 16) scale(.58 .91) translate(-330.364 -589.813)" fill="url(#emerald)" fill-rule="evenodd" clip-rule="evenodd" d="M330.364 589.813H385.836V595.604L366.421 618.669H385.836V624.86H330.364V589.813ZM338.044 596.004H376.129L356.927 618.669H338.044V609.683H356.18L362.26 603.393H338.044V596.004Z"/>
 </svg>

@@ -1,0 +1,276 @@
+/* Material and depth refinements, kept separate for this design review. */
+.nav {
+  isolation: isolate;
+  border-color: #ffffff24;
+  background: #0c1411ed;
+  box-shadow: 0 18px 42px #0004, inset 0 1px 2px #ffffff38,
+    inset 0 -1px 2px #ffffff15, inset 2px 0 8px #ffffff0c;
+}
+.nav::before,
+.nav::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.nav::before {
+  z-index: -1;
+  background: radial-gradient(ellipse at 2% 0, #ffffff24, transparent 22%),
+    radial-gradient(ellipse at 98% 100%, rgb(var(--ambient-rgb) / .1), transparent 38%),
+    linear-gradient(180deg, #ffffff06, transparent 55%, #00000012);
+}
+.nav::after {
+  padding: 1px;
+  background: linear-gradient(115deg, #e5fff280, #ffffff12 28%, #ffffff16 74%, #ffffff38);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+}
+.nav__brand,
+.nav__links,
+.nav__toggle {
+  position: relative;
+  z-index: 1;
+}
+@supports (backdrop-filter: blur(18px)) or (-webkit-backdrop-filter: blur(18px)) {
+  .nav {
+    background: linear-gradient(110deg, #121a184d, #080d0d38);
+    backdrop-filter: blur(18px) saturate(1.75) contrast(1.06);
+    -webkit-backdrop-filter: blur(18px) saturate(1.75) contrast(1.06);
+  }
+}
+
+/* Translucent material only: the card's printing, geometry and sequence stay intact. */
+.nfc-card {
+  border-color: #9cb9a777;
+  background: linear-gradient(120deg, #c7ffdf14, transparent 40%, #b0dcc70a 85%), #111f18e8;
+  box-shadow: 0 24px 40px #0005, inset 0 1px #e7fff534, inset 0 -1px #a9e9c714;
+}
+@supports (backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px)) {
+  .nfc-card {
+    background: linear-gradient(120deg, #c7ffdf1c, transparent 40%, #b0dcc70b 85%), #0a201666;
+    backdrop-filter: blur(2px) saturate(1.2);
+    -webkit-backdrop-filter: blur(2px) saturate(1.2);
+  }
+}
+
+/* Restore the original three dark website concepts and their geometric artwork. */
+.browser-stack {
+  isolation: isolate;
+  transform: perspective(1100px) rotateY(-9deg) rotateX(3deg);
+}
+.browser {
+  z-index: 2;
+  border-color: #d9eee52e;
+  border-radius: 8px;
+  background: #101614;
+  box-shadow: 0 30px 55px #0006, 0 0 30px rgb(var(--ambient-rgb) / .045), inset 0 1px #ffffff0a;
+  transform: none;
+}
+.browser__chrome {
+  height: 32px;
+  gap: 6px;
+  padding: 0 13px;
+  border-bottom: 1px solid #ffffff0d;
+  background: #141b19;
+  color: #71817b;
+  font-size: 7px;
+  letter-spacing: .08em;
+}
+.browser__chrome i {
+  width: 6px;
+  height: 6px;
+}
+.browser__chrome i:first-child { background: #b76d55; }
+.browser__chrome i:nth-child(2) { background: #c5a45d; }
+.browser__chrome i:nth-child(3) { background: #5ca884; }
+.browser__chrome span { margin: auto; }
+.browser__page {
+  min-height: 300px;
+  padding: 25px 27px 15px;
+  color: #e6e8df;
+}
+.browser--restaurant .browser__page {
+  background: radial-gradient(ellipse at 80% 50%, #dea96418, transparent 42%),
+    linear-gradient(130deg, #252923, #151914 60%, #101513);
+}
+.browser--studio .browser__page {
+  color: #e6e8df;
+  background: radial-gradient(ellipse at 79% 49%, #76927825, transparent 40%),
+    linear-gradient(130deg, #202924, #111714 70%);
+}
+.browser--portfolio .browser__page {
+  color: #e6e8df;
+  background: radial-gradient(ellipse at 80% 50%, #6089c62e, transparent 42%),
+    linear-gradient(130deg, #202a35, #141a22 65%);
+}
+.browser__nav strong {
+  color: #e6e8df;
+  font: 500 8px var(--mono);
+  letter-spacing: .12em;
+}
+.browser__nav > span { color: #a5aaa1; }
+.browser__content {
+  min-height: 230px;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 17px;
+}
+.browser__copy em {
+  display: block;
+  color: #d7b878;
+  font-size: 7px;
+  font-style: normal;
+  letter-spacing: .16em;
+}
+.browser .browser__copy h3 {
+  max-width: 250px;
+  margin: 14px 0 10px;
+  color: #f0eee6;
+  font-family: inherit;
+  font-size: clamp(20px, 2.5vw, 32px);
+  line-height: 1.08;
+  letter-spacing: -.055em;
+  font-weight: 500;
+}
+.browser .browser__copy p {
+  margin: 0;
+  color: #aeb4ab;
+  font-size: 9px;
+  line-height: 1.65;
+}
+.browser--portfolio .browser__copy em { color: #90b9f2; }
+.browser__art {
+  height: 145px;
+  overflow: hidden;
+  clip-path: polygon(25% 0, 100% 0, 100% 100%, 0 100%, 0 35%);
+}
+.browser--restaurant .browser__art {
+  background: linear-gradient(145deg, #e9bc7126, #42574161),
+    repeating-linear-gradient(120deg, transparent 0 14px, #ffffff0a 15px 16px);
+}
+.browser--studio .browser__art {
+  background: linear-gradient(130deg, #6d946c40, #233e3199),
+    repeating-linear-gradient(20deg, transparent 0 21px, #ffffff0b 22px 23px);
+}
+.browser--portfolio .browser__art {
+  background: linear-gradient(150deg, #5b94d436, #2f3c53b8),
+    radial-gradient(circle at 50% 50%, #afd2ff4d, transparent 46%);
+}
+.browser .browser__art :is(span, i, b) {
+  display: block;
+  inset: auto;
+  border: 1px solid #f5e2ba59;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  transform: rotate(31deg);
+}
+.browser .browser__art span {
+  width: 46%;
+  height: 89%;
+  top: 15%;
+  left: 17%;
+}
+.browser .browser__art i {
+  width: 31%;
+  height: 76%;
+  top: 39%;
+  left: 48%;
+  opacity: .65;
+}
+.browser .browser__art b {
+  width: 62%;
+  height: 124%;
+  top: -12%;
+  left: 66%;
+  opacity: .35;
+}
+.browser__baseline {
+  padding-top: 12px;
+  border-top: 1px solid #ffffff1a;
+  color: #87938a;
+}
+.browser-stack__back {
+  z-index: 1;
+  right: -13%;
+  top: 18%;
+  width: 73%;
+  opacity: .7;
+  transform: translateY(33px) scale(.9);
+}
+.browser-stack__back .browser { transform: none; }
+.browser-stack__back .browser__page { min-height: 265px; }
+.browser-stack__back .browser__content { min-height: 190px; }
+.portfolio-window {
+  transform: perspective(1000px) rotateY(9deg) rotateX(3deg);
+}
+.portfolio-window .browser { transform: none; }
+.portfolio-window__badge {
+  right: -12px;
+  bottom: 34px;
+  z-index: 3;
+  border: 1px solid #719dd84a;
+  border-radius: 0;
+  background: #0c151ee3;
+  box-shadow: 0 15px 30px #0005;
+  color: #9db0c1;
+}
+.portfolio-window__badge svg { color: #a2cbff; }
+.portfolio-window__badge b { color: #d9e8f7; }
+
+/* One repeating SVG tile makes a continuous honeycomb, faded by its SVG mask. */
+@property --ambient {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #00e7a3;
+}
+@property --ambient-rgb {
+  syntax: '<number>+';
+  inherits: true;
+  initial-value: 0 231 163;
+}
+html {
+  transition: --ambient 1.8s ease, --ambient-rgb 1.8s ease;
+}
+.hex-scene {
+  perspective: none;
+  contain: paint;
+  background: radial-gradient(ellipse at 88% 24%, rgb(var(--ambient-rgb) / .035), transparent 65%);
+}
+.honeycomb {
+  position: absolute;
+  inset: 0;
+  display: block;
+  color: rgb(var(--ambient-rgb) / .38);
+}
+@media (max-width: 1000px) {
+  .browser__page { padding: 21px; }
+  .browser__content { min-height: 205px; gap: 12px; }
+  .browser .browser__copy h3 { font-size: 24px; }
+  .browser__art { height: 130px; }
+}
+@media (max-width: 760px) {
+  .nav__links { position: absolute; }
+  .browser__page { min-height: 280px; }
+  .browser__content { min-height: 205px; }
+  .browser .browser__copy h3 { font-size: 26px; }
+  .browser-stack { transform: perspective(1100px) rotateY(-6deg) rotateX(2deg); }
+  .portfolio-window { transform: perspective(1000px) rotateY(6deg) rotateX(2deg); }
+  .honeycomb { color: rgb(var(--ambient-rgb) / .3); }
+}
+@media (max-width: 420px) {
+  .browser__page { padding: 18px; min-height: 255px; }
+  .browser__content { min-height: 185px; }
+  .browser .browser__copy h3 { font-size: 22px; }
+  .browser__art { height: 115px; }
+  .browser__nav strong { font-size: 7px; }
+  .browser__chrome { height: 28px; font-size: 6px; }
+  .browser-stack__back .browser__page { min-height: 235px; }
+  .browser-stack__back .browser__content { min-height: 165px; }
+  .portfolio-window__badge { right: -8px; padding: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .browser-stack, .portfolio-window { transform: none; }
+}

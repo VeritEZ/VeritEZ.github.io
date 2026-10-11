@@ -856,6 +856,7 @@ h3 {
 }
 .phone-profile {
   position:absolute;
+  z-index:2;
   inset:0;
   display:flex;
   align-items:center;
@@ -957,6 +958,13 @@ h3 {
 .nfc-stage[data-phase="profile"] .nfc-card {
   transform:translate(-3%,10%) rotate(-12deg) rotateY(-8deg)
 }
+.nfc-stage[data-phase="return"] .phone-profile {
+  transform-origin:50% 85%;
+  animation:phone-profile-close .7s cubic-bezier(.32,0,.2,1) both
+}
+.nfc-stage[data-phase="return"] .phone-home {
+  animation:phone-home-return .7s cubic-bezier(.2,.7,.2,1) both
+}
 .nfc-stage[data-phase="scan"] .nfc-rings {
   opacity:1
 }
@@ -995,6 +1003,26 @@ h3 {
   }
   to {
     transform:scaleX(1)
+  }
+}
+@keyframes phone-profile-close {
+  from {
+    opacity:1;
+    transform:translateY(0) scale(1)
+  }
+  to {
+    opacity:0;
+    transform:translateY(28px) scale(.88)
+  }
+}
+@keyframes phone-home-return {
+  from {
+    opacity:0;
+    transform:scale(1.035)
+  }
+  to {
+    opacity:1;
+    transform:scale(1)
   }
 }
 .products__title {
@@ -1355,6 +1383,23 @@ h3 {
   justify-content:space-between;
   gap:50px;
   padding-bottom:45px
+}
+.footer__brand {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  align-self:flex-start;
+  width:fit-content;
+  gap:16px
+}
+.footer__tagline {
+  color:#b6c7bd;
+  font-family:var(--description-font);
+  font-size:10px;
+  font-weight:300;
+  letter-spacing:.12em;
+  line-height:1.5;
+  text-align:center
 }
 .footer__brand .wordmark {
   width:145px

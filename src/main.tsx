@@ -1,4 +1,5 @@
 import './styles.css'
+import './materials.css'
 
 // React renders the complete document during the build. Only these small,
 // independent enhancements run in the visitor's browser.
@@ -44,11 +45,22 @@ form.addEventListener('submit', event => {
   window.location.href = `mailto:mohammedayanmahmood@gmail.com?subject=${subject}&body=${body}`
 })
 
+const visibleSections = new Set<HTMLElement>()
 const themes = new IntersectionObserver(entries => {
-  const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
-  if (visible) document.documentElement.dataset.theme = (visible.target as HTMLElement).dataset.theme ?? 'emerald'
+  entries.forEach(entry => {
+    const section = entry.target as HTMLElement
+    if (entry.isIntersecting) visibleSections.add(section)
+    else visibleSections.delete(section)
+  })
+  const center = innerHeight * .425
+  const distance = (section: HTMLElement) => {
+    const rect = section.getBoundingClientRect()
+    return Math.max(rect.top - center, center - rect.bottom, 0)
+  }
+  const active = [...visibleSections].sort((a, b) => distance(a) - distance(b))[0]
+  if (active) document.documentElement.dataset.theme = active.dataset.theme ?? 'emerald'
 }, { rootMargin: '-30% 0px -45% 0px', threshold: [0, 0.15, 0.35, 0.6] })
-document.querySelectorAll('[data-theme]').forEach(section => themes.observe(section))
+document.querySelectorAll('main .section[data-theme], footer[data-theme]').forEach(section => themes.observe(section))
 
 const stage = document.querySelector<HTMLElement>('.nfc-stage')!
 const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -59,7 +71,9 @@ let inView = false
 function setPhase(phase: Phase) {
   stage.dataset.phase = phase
   const profile = phase === 'profile' || phase === 'return'
-  stage.querySelector<HTMLElement>('.phone-home')!.hidden = profile
+  // Reveal home underneath the closing profile, then hide the profile only
+  // after the return phase has finished its animation.
+  stage.querySelector<HTMLElement>('.phone-home')!.hidden = phase === 'profile'
   stage.querySelector<HTMLElement>('.phone-nfc')!.hidden = phase !== 'scan'
   stage.querySelector<HTMLElement>('.phone-profile')!.hidden = !profile
 }
