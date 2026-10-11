@@ -77,7 +77,7 @@ function NfcShowcase() {
   return <div className={`nfc-stage ${tapped ? 'is-tapped' : ''}`}>
     <div className="nfc-stage__halo" />
     <div className="nfc-card"><div className="nfc-card__top"><Wordmark/><span>01 / 04</span></div><div className="nfc-card__mark"><span className="nfc-card__hex"><Icon name="signal" size={17}/></span><span>Tap into<br/>opportunity.</span></div><div className="nfc-card__bottom"><span>VERITEZ DIGITAL ID</span><span>STUDIO EDITION</span></div></div>
-    <div className="nfc-phone"><div className="nfc-phone__speaker"/><div className="nfc-phone__screen"><div className="profile-avatar">A</div><b>Ayaan Mahmood</b><span>Digital solutions · VeritEZ</span><i>Save contact</i><small>Portfolio&nbsp;&nbsp; LinkedIn&nbsp;&nbsp; Email</small></div></div>
+    <div className="nfc-phone"><div className="nfc-phone__speaker"/><div className="nfc-phone__screen"><div className="profile-avatar">J</div><b>John Doe</b><span>Digital solutions · VeritEZ</span><i>Save contact</i><small>Portfolio&nbsp;&nbsp; LinkedIn&nbsp;&nbsp; Email</small></div></div>
     <div className="nfc-rings"><span/><span/><span/></div>
     <button className="nfc-tap" type="button" onClick={() => setTapped(!tapped)} aria-pressed={tapped}><Icon name="signal" size={16}/>{tapped ? 'Reset demo' : 'Tap to preview'}</button>
     <div className="nfc-caption">Illustrative interaction · no NFC hardware is activated</div>
@@ -158,12 +158,7 @@ function App() {
             <div className="hero__actions reveal"><ButtonLink href="#solutions">Explore solutions</ButtonLink></div>
             <div className="hero__tagline reveal">Tap Into Opportunity.</div>
           </div>
-          <div className="hero__visual" aria-label="VeritEZ identity with an NFC wave interaction">
-            <div className="hero-core" tabIndex={0} role="img" aria-label="VeritEZ mark. Hover or focus to preview the NFC connection wave." onPointerEnter={(event) => event.currentTarget.classList.add('is-active')} onPointerLeave={(event) => event.currentTarget.classList.remove('is-active')} onFocus={(event) => event.currentTarget.classList.add('is-active')} onBlur={(event) => event.currentTarget.classList.remove('is-active')}>
-              <div className="hero-core__inner"><Wordmark className="hero-core__wordmark"/></div>
-            </div>
-            <div className="hero-core__waves" aria-hidden="true"><i/><i/><i/></div>
-          </div>
+          <div className="hero__visual" aria-label="NFC card and phone interaction preview"><NfcShowcase/></div>
         </div>
         <a className="scroll-cue" href="#about"><span>SCROLL TO EXPLORE</span><i/></a>
       </section>
@@ -205,7 +200,7 @@ function App() {
 
       <section className="products section" id="products" data-theme="teal">
         <div className="content-width products__head"><div className="products__title reveal"><h2>One tap.<br/><span>A world of possibilities.</span></h2><p>Connect a real-world introduction to a digital profile, business page, or review destination.</p></div></div>
-        <div className="content-width products__layout"><NfcShowcase/><div className="products__details reveal">
+        <div className="content-width products__layout"><div className="products__details reveal">
           <div className="product-list"><article><div><h3>NFC business cards</h3><p>Reusable cards that open a profile or contact page on compatible devices.</p></div></article><article><div><h3>NFC keychains</h3><p>A portable way to share your chosen digital destination.</p></div></article><article><div><h3>Review cards & stands</h3><p>Tap or scan to reach a business review page and leave genuine feedback.</p></div></article><article><div><h3>QR code companions</h3><p>A scannable alternative for devices that do not support NFC.</p></div></article></div>
           <div className="steps-line"><div><b>01</b><span>Choose<br/>your product</span></div><i/><div><b>02</b><span>Connect your<br/>destination</span></div><i/><div><b>03</b><span>Tap or scan<br/>to share</span></div></div>
           <p className="product-disclaimer">NFC availability and behavior vary by device. This page’s tap demo is an illustration; it does not activate device NFC.</p>
