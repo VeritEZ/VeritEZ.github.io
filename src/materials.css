@@ -231,20 +231,37 @@
   inherits: true;
   initial-value: 0 231 163;
 }
-html {
-  transition: --ambient 1.8s ease, --ambient-rgb 1.8s ease;
+@property --honeycomb-tone {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #00e7a3;
 }
+html {
+  --honeycomb-tone: #00e7a3;
+  transition: --ambient 1.8s ease, --ambient-rgb 1.8s ease, --honeycomb-tone 1.1s ease;
+}
+html[data-theme="gold"] { --honeycomb-tone: #d6a75b; }
+html[data-theme="blue"] { --honeycomb-tone: #709fec; }
+html[data-theme="teal"] { --honeycomb-tone: #50c7c2; }
+html[data-theme="amber"] { --honeycomb-tone: #d49372; }
+html[data-theme="green"] { --honeycomb-tone: #a6c779; }
 .hex-scene {
   perspective: none;
   contain: paint;
-  background: radial-gradient(ellipse at 88% 24%, rgb(var(--ambient-rgb) / .035), transparent 65%);
+  background: linear-gradient(to bottom left, color-mix(in srgb, var(--honeycomb-tone) 8%, transparent), transparent 78%);
 }
 .honeycomb {
   position: absolute;
   inset: 0;
   display: block;
-  color: rgb(var(--ambient-rgb) / .38);
+  opacity: .31875;
 }
+.honeycomb__cool { stop-color: color-mix(in srgb, var(--honeycomb-tone) 80%, #638cbd); }
+.honeycomb__brand { stop-color: var(--honeycomb-tone); }
+.honeycomb__light { stop-color: color-mix(in srgb, var(--honeycomb-tone) 82%, #d7edf1); }
+.nav__ez-light { stop-color: color-mix(in srgb, var(--honeycomb-tone) 56%, white); }
+.nav__ez-tone { stop-color: var(--honeycomb-tone); }
+.nav__ez-dark { stop-color: color-mix(in srgb, var(--honeycomb-tone) 73%, #001c14); }
 @media (max-width: 1000px) {
   .browser__page { padding: 21px; }
   .browser__content { min-height: 205px; gap: 12px; }
@@ -258,7 +275,7 @@ html {
   .browser .browser__copy h3 { font-size: 26px; }
   .browser-stack { transform: perspective(1100px) rotateY(-6deg) rotateX(2deg); }
   .portfolio-window { transform: perspective(1000px) rotateY(6deg) rotateX(2deg); }
-  .honeycomb { color: rgb(var(--ambient-rgb) / .3); }
+  .honeycomb { opacity: .26775; }
 }
 @media (max-width: 420px) {
   .browser__page { padding: 18px; min-height: 255px; }

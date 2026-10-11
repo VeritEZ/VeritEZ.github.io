@@ -41,7 +41,19 @@ const faqs = [
   ['How do I request a quote?', 'Use the contact form to prepare an email with your project details. It opens your email application so you can review and send the message.'],
 ]
 
-function Wordmark({ className = '' }: { className?: string }) {
+function Wordmark({ className = '', themed = false }: { className?: string; themed?: boolean }) {
+  if (themed) return <svg className={`wordmark ${className}`} viewBox="220 580 174 52" width="348" height="104" role="img" aria-label="VeritEZ">
+    <defs>
+      <clipPath id="nav-wordmark-silver"><rect x="220" y="580" width="110" height="52"/></clipPath>
+      <linearGradient id="nav-wordmark-ez" x1="330.364" y1="589.813" x2="330.364" y2="624.86" gradientUnits="userSpaceOnUse">
+        <stop className="nav__ez-light" stopColor="#70FFD5"/>
+        <stop className="nav__ez-tone" offset=".5" stopColor="#00E7A3"/>
+        <stop className="nav__ez-dark" offset="1" stopColor="#00A872"/>
+      </linearGradient>
+    </defs>
+    <image href="/veritez-wordmark.svg" x="220" y="580" width="174" height="52" clipPath="url(#nav-wordmark-silver)" aria-hidden="true"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M330.364 589.813H385.836V595.604L366.421 618.669H385.836V624.86H330.364V589.813ZM338.044 596.004H376.129L356.927 618.669H338.044V609.683H356.18L362.26 603.393H338.044V596.004Z" fill="url(#nav-wordmark-ez)"/>
+  </svg>
   return <img className={`wordmark ${className}`} src="/veritez-wordmark.svg" width="348" height="104" alt="VeritEZ" />
 }
 
@@ -63,22 +75,59 @@ function MockBrowser({ type }: { type: 'restaurant' | 'studio' | 'portfolio' }) 
 }
 
 function HexScene() {
+  // Small, overlapping gradients vary nearby cells without hard opacity steps.
+  // Wrapped copies keep the repeating tile seamless at every edge.
+  const highlights = [
+    [48, 42, 94], [264, 84, 110], [480, 42, 88],
+    [120, 252, 104], [336, 252, 92], [552, 210, 112],
+  ].flatMap(([x, y, radius], index) => [-576, 0, 576].flatMap(dx => [-336, 0, 336].flatMap(dy => {
+    const cx = x + dx
+    const cy = y + dy
+    if (cx + radius < 0 || cx - radius > 576 || cy + radius < 0 || cy - radius > 336) return []
+    return <circle key={`${index}-${dx}-${dy}`} cx={cx} cy={cy} r={radius} fill="url(#honeycomb-cell-glow)"/>
+  })))
   return <div className="hex-scene" aria-hidden="true">
     <svg className="honeycomb" width="100%" height="100%" focusable="false">
       <defs>
         <pattern id="honeycomb-cells" width="144" height="84" patternUnits="userSpaceOnUse">
-          <path d="M24 0H72L96 42L72 84H24L0 42ZM96 42H144" fill="none" stroke="currentColor" strokeWidth=".8"/>
+          <path d="M24 0H72L96 42L72 84H24L0 42ZM96 42H144" fill="none" stroke="white" strokeWidth="2.4" strokeLinejoin="round"/>
         </pattern>
-        <radialGradient id="honeycomb-opacity" cx="88%" cy="24%" r="95%">
+        <linearGradient id="honeycomb-color" x1="0" y1="100%" x2="100%" y2="0">
+          <stop className="honeycomb__cool" offset="0" stopColor="#638cbd"/>
+          <stop className="honeycomb__brand" offset=".48" stopColor="#00e7a3"/>
+          <stop className="honeycomb__light" offset="1" stopColor="#79c9df"/>
+        </linearGradient>
+        <mask id="honeycomb-lines">
+          <rect width="100%" height="100%" fill="url(#honeycomb-cells)"/>
+        </mask>
+        <linearGradient id="honeycomb-opacity" x1="100%" y1="0" x2="0" y2="100%">
           <stop offset="0" stopColor="white" stopOpacity=".9"/>
-          <stop offset=".48" stopColor="white" stopOpacity=".4"/>
-          <stop offset="1" stopColor="white" stopOpacity=".035"/>
-        </radialGradient>
+          <stop offset=".3" stopColor="white" stopOpacity=".65"/>
+          <stop offset=".65" stopColor="white" stopOpacity=".22"/>
+          <stop offset="1" stopColor="white" stopOpacity="0"/>
+        </linearGradient>
         <mask id="honeycomb-fade">
           <rect width="100%" height="100%" fill="url(#honeycomb-opacity)"/>
         </mask>
+        <radialGradient id="honeycomb-cell-glow">
+          <stop offset="0" stopColor="white" stopOpacity=".95"/>
+          <stop offset=".35" stopColor="white" stopOpacity=".8"/>
+          <stop offset=".7" stopColor="white" stopOpacity=".3"/>
+          <stop offset="1" stopColor="white" stopOpacity="0"/>
+        </radialGradient>
+        <pattern id="honeycomb-cell-variation" width="576" height="336" patternUnits="userSpaceOnUse">
+          <rect width="576" height="336" fill="white" opacity=".12"/>
+          {highlights}
+        </pattern>
+        <mask id="honeycomb-variation">
+          <rect width="100%" height="100%" fill="url(#honeycomb-cell-variation)"/>
+        </mask>
       </defs>
-      <rect width="100%" height="100%" fill="url(#honeycomb-cells)" mask="url(#honeycomb-fade)"/>
+      <g mask="url(#honeycomb-fade)">
+        <g mask="url(#honeycomb-variation)">
+          <rect width="100%" height="100%" fill="url(#honeycomb-color)" mask="url(#honeycomb-lines)"/>
+        </g>
+      </g>
     </svg>
   </div>
 }
@@ -109,7 +158,7 @@ function App() {
     <HexScene />
     <header className="site-header">
       <nav className="nav glass-panel" aria-label="Main navigation">
-        <a className="nav__brand" href="#top" aria-label="VeritEZ home"><Wordmark/></a>
+        <a className="nav__brand" href="#top" aria-label="VeritEZ home"><Wordmark themed/></a>
         <button className="nav__toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="nav-links"><span/><span/></button>
         <div className="nav__links" id="nav-links">
           {nav.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
@@ -130,14 +179,14 @@ function App() {
         </div>
       </section>
 
-      <section className="intro section" id="about" data-theme="emerald">
+      <section className="intro section" id="about" data-theme="teal">
         <div className="content-width intro__layout">
           <div className="intro__main reveal"><h2>Practical tools for<br/><span>people and businesses.</span></h2><p>VeritEZ builds websites and NFC products that help you share information, show your work, and stay in contact.</p></div>
           <div className="principles reveal"><div><span>01</span><h3>Connect.</h3><p>Make it easier for people to reach you.</p></div><div><span>02</span><h3>Present.</h3><p>Put your work or services in one clear place.</p></div><div><span>03</span><h3>Share.</h3><p>Give someone a direct link to what matters.</p></div></div>
         </div>
       </section>
 
-      <section className="solutions section" id="solutions" data-theme="emerald">
+      <section className="solutions section" id="solutions" data-theme="blue">
         <div className="content-width">
           <div className="section-heading reveal"><div><h2>What we offer.</h2><p>Websites and NFC products for your business, your work, and the people you meet.</p></div></div>
           <div className="solution-grid">
