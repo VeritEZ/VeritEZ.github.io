@@ -23,10 +23,10 @@ const nav = [
 ]
 
 const services: { icon: IconName; number: string; title: string; blurb: string; link: string }[] = [
-  { icon: 'web', number: '01', title: 'Business websites', blurb: 'Show what you offer, answer common questions, and make it easy for customers to contact you.', link: '#business' },
-  { icon: 'person', number: '02', title: 'Personal websites', blurb: 'Keep your work, experience, and contact details in one place that feels like yours.', link: '#personal' },
-  { icon: 'signal', number: '03', title: 'NFC products', blurb: 'Share a profile, website, or review page through a card, keychain, or stand.', link: '#products' },
-  { icon: 'spark', number: '04', title: 'Career support', blurb: 'Résumé, profile, and application support is in development and is not available yet.', link: '#career' },
+  { icon: 'web', number: '01', title: 'Business websites.', blurb: 'Show what you offer, answer common questions, and make it easy for customers to contact you.', link: '#business' },
+  { icon: 'person', number: '02', title: 'Personal websites.', blurb: 'Keep your work, experience, and contact details in one place that feels like yours.', link: '#personal' },
+  { icon: 'signal', number: '03', title: 'NFC products.', blurb: 'Share a profile, website, or review page through a card, keychain, or stand.', link: '#products' },
+  { icon: 'spark', number: '04', title: 'Career support.', blurb: 'Résumé, profile, and application support is in development and is not available yet.', link: '#career' },
 ]
 
 const faqs = [
@@ -73,12 +73,41 @@ function HexScene() {
 }
 
 function NfcShowcase() {
-  return <div className="nfc-stage" tabIndex={0} aria-label="NFC card and phone preview. Hover or focus to see the connection animation.">
+  const [phase, setPhase] = useState<'home' | 'approach' | 'scan' | 'profile' | 'return'>('home')
+  useEffect(() => {
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const sequence = [
+      ['home', 2000], ['approach', 1600], ['scan', 1800], ['profile', 4200], ['return', 1600],
+    ] as const
+    let timer: ReturnType<typeof setTimeout>
+    function play(index = 0) {
+      if (motion.matches) { setPhase('profile'); return }
+      const [next, duration] = sequence[index]
+      setPhase(next)
+      timer = setTimeout(() => play((index + 1) % sequence.length), duration)
+    }
+    function restart() { clearTimeout(timer); play() }
+    play()
+    motion.addEventListener('change', restart)
+    return () => { clearTimeout(timer); motion.removeEventListener('change', restart) }
+  }, [])
+  const profileVisible = phase === 'profile' || phase === 'return'
+  return <div className="nfc-stage" data-phase={phase} role="img" aria-label="Animated NFC demonstration: a card approaches a phone’s home screen, the phone detects NFC, then opens John Doe’s contact profile.">
     <div className="nfc-stage__halo" />
-    <div className="nfc-card"><div className="nfc-card__top"><Wordmark/><span>01 / 04</span></div><div className="nfc-card__mark"><span className="nfc-card__hex"><Icon name="signal" size={17}/></span><span>Digital<br/>business card</span></div><div className="nfc-card__bottom"><span>VERITEZ DIGITAL ID</span><span>STUDIO EDITION</span></div></div>
-    <div className="nfc-phone"><div className="nfc-phone__speaker"/><div className="nfc-phone__screen"><div className="profile-avatar">J</div><b>John Doe</b><span>Digital solutions · VeritEZ</span><i>Save contact</i><small>Portfolio&nbsp;&nbsp; LinkedIn&nbsp;&nbsp; Email</small></div></div>
-    <div className="nfc-rings"><span/><span/><span/></div>
-    <div className="nfc-caption">Hover or focus to preview · no NFC hardware is activated</div>
+    <div className="nfc-card" aria-hidden="true"><div className="nfc-card__top"><Wordmark/><span>01 / 04</span></div><div className="nfc-card__mark"><span className="nfc-card__hex"><Icon name="signal" size={17}/></span><span className="nfc-card__tagline">TAP INTO OPPORTUNITY</span></div><div className="nfc-card__bottom"><span>VERITEZ DIGITAL ID</span><span>STUDIO EDITION</span></div></div>
+    <div className="nfc-phone" aria-hidden="true"><div className="nfc-phone__speaker"/><div className="nfc-phone__screen">
+      <div className="phone-status"><span>9:41</span><span>▮▮▮ <i/></span></div>
+      <div className="phone-home" hidden={profileVisible}>
+        <div className="phone-clock">9:41<small>Monday, 12 October</small></div>
+        <div className="phone-apps">{(['web', 'person', 'pin', 'screen', 'link', 'spark'] as IconName[]).map((name) => <span key={name}><Icon name={name} size={18}/></span>)}</div>
+        <div className="phone-dock"><Icon name="person" size={17}/><Icon name="web" size={17}/><Icon name="link" size={17}/></div>
+      </div>
+      <div className="phone-nfc" hidden={phase !== 'scan'}><span className="phone-nfc__icon"><Icon name="signal" size={26}/></span><b>NFC detected</b><small>Opening contact…</small><span className="phone-nfc__progress"/></div>
+      <div className="phone-profile" hidden={!profileVisible}><div className="profile-avatar">J</div><b>John Doe</b><span>Digital solutions · VeritEZ</span><i>Save contact</i><small>Portfolio&nbsp;&nbsp; LinkedIn&nbsp;&nbsp; Email</small><div className="phone-profile__connected"><Icon name="signal" size={12}/>Connected</div></div>
+      <div className="phone-home-bar"/>
+    </div></div>
+    <div className="nfc-rings" aria-hidden="true"><span/><span/><span/></div>
+    <div className="nfc-caption">Illustrative NFC sequence. No device NFC is activated.</div>
   </div>
 }
 
@@ -161,14 +190,14 @@ function App() {
 
       <section className="intro section" id="about" data-theme="emerald">
         <div className="content-width intro__layout">
-          <div className="intro__main reveal"><h2>Practical tools for<br/><span>people and businesses</span></h2><p>VeritEZ builds websites and NFC products that help you share information, show your work, and stay in contact.</p></div>
-          <div className="principles reveal"><div><span>01</span><h3>Connect</h3><p>Make it easier for people to reach you.</p></div><div><span>02</span><h3>Present</h3><p>Put your work or services in one clear place.</p></div><div><span>03</span><h3>Share</h3><p>Give someone a direct link to what matters.</p></div></div>
+          <div className="intro__main reveal"><h2>Practical tools for<br/><span>people and businesses.</span></h2><p>VeritEZ builds websites and NFC products that help you share information, show your work, and stay in contact.</p></div>
+          <div className="principles reveal"><div><span>01</span><h3>Connect.</h3><p>Make it easier for people to reach you.</p></div><div><span>02</span><h3>Present.</h3><p>Put your work or services in one clear place.</p></div><div><span>03</span><h3>Share.</h3><p>Give someone a direct link to what matters.</p></div></div>
         </div>
       </section>
 
       <section className="solutions section" id="solutions" data-theme="emerald">
         <div className="content-width">
-          <div className="section-heading reveal"><div><h2>What we offer</h2><p>Websites and NFC products for your business, your work, and the people you meet.</p></div></div>
+          <div className="section-heading reveal"><div><h2>What we offer.</h2><p>Websites and NFC products for your business, your work, and the people you meet.</p></div></div>
           <div className="solution-grid">
             {services.map((service) => <a className="solution-card glass-panel reveal" href={service.link} key={service.number}>
               <div className="solution-card__icon"><Icon name={service.icon} size={27}/><div className="icon-halo"/></div>
@@ -181,7 +210,7 @@ function App() {
 
       <section className="business section" id="business" data-theme="gold">
         <div className="content-width showcase showcase--business">
-          <div className="showcase__copy reveal"><h2>A website that explains<br/><span>your business</span></h2><p>Give customers a clear place to see your services, find key details, and get in touch.</p><ul className="feature-list"><li><Icon name="screen" size={18}/> Works on every screen</li><li><Icon name="pin" size={18}/> Organized around your business</li><li><Icon name="spark" size={18}/> Clear content and navigation</li></ul></div>
+          <div className="showcase__copy reveal"><h2>A website that explains<br/><span>your business.</span></h2><p>Give customers a clear place to see your services, find key details, and get in touch.</p><ul className="feature-list"><li><Icon name="screen" size={18}/> Works on every screen</li><li><Icon name="pin" size={18}/> Organized around your business</li><li><Icon name="spark" size={18}/> Clear content and navigation</li></ul></div>
           <div className="showcase__art reveal"><div className="browser-stack"><MockBrowser type="restaurant"/><div className="browser-stack__back"><MockBrowser type="studio"/></div></div><div className="concept-note"><span>CONCEPT STUDY / 01</span><i/>Illustrative design direction</div><div className="showcase-orbit"/></div>
         </div>
       </section>
@@ -189,46 +218,46 @@ function App() {
       <section className="personal section" id="personal" data-theme="blue">
         <div className="content-width showcase showcase--personal">
           <div className="showcase__art reveal"><div className="portfolio-orbit"><span/><span/><span/></div><div className="portfolio-window"><MockBrowser type="portfolio"/><div className="portfolio-window__badge"><Icon name="person" size={18}/><span>YOUR WORK<br/><b>YOUR STORY</b></span></div></div><div className="concept-note"><span>CONCEPT STUDY / 02</span><i/>Personal portfolio direction</div></div>
-          <div className="showcase__copy reveal"><h2>Your work in<br/><span>one place</span></h2><p>Share your projects, experience, and contact details on a site that feels like yours.</p><div className="audience-chips"><span>Students</span><span>Researchers</span><span>Freelancers</span><span>Professionals</span><span>Job seekers</span></div></div>
+          <div className="showcase__copy reveal"><h2>Your work in<br/><span>one place.</span></h2><p>Share your projects, experience, and contact details on a site that feels like yours.</p><div className="audience-chips"><span>Students</span><span>Researchers</span><span>Freelancers</span><span>Professionals</span><span>Job seekers</span></div></div>
         </div>
       </section>
 
       <section className="products section" id="products" data-theme="teal">
-        <div className="content-width products__head"><div className="products__title reveal"><h2>Share more<br/><span>with a tap</span></h2><p>An NFC card, keychain, or stand can open a profile, business page, or review link on a compatible phone.</p></div></div>
+        <div className="content-width products__head"><div className="products__title reveal"><h2>Share more<br/><span>with a tap.</span></h2><p>An NFC card, keychain, or stand can open a profile, business page, or review link on a compatible phone.</p></div></div>
         <div className="content-width products__layout"><div className="products__details reveal">
-          <div className="product-list"><article><div><h3>NFC business cards</h3><p>Reusable cards that open a profile or contact page on compatible devices.</p></div></article><article><div><h3>NFC keychains</h3><p>A portable way to share your chosen digital destination.</p></div></article><article><div><h3>Review cards & stands</h3><p>Tap or scan to reach a business review page and leave genuine feedback.</p></div></article><article><div><h3>QR code companions</h3><p>A scannable alternative for devices that do not support NFC.</p></div></article></div>
+          <div className="product-list"><article><div><h3>NFC business cards.</h3><p>Reusable cards that open a profile or contact page on compatible devices.</p></div></article><article><div><h3>NFC keychains.</h3><p>A portable way to share your chosen digital destination.</p></div></article><article><div><h3>Review cards & stands.</h3><p>Tap or scan to reach a business review page and leave genuine feedback.</p></div></article><article><div><h3>QR code companions.</h3><p>A scannable alternative for devices that do not support NFC.</p></div></article></div>
           <div className="steps-line"><div><b>01</b><span>Choose<br/>your product</span></div><i/><div><b>02</b><span>Connect your<br/>destination</span></div><i/><div><b>03</b><span>Tap or scan<br/>to share</span></div></div>
           <p className="product-disclaimer">NFC support varies by device. The phone and card above are an illustration; they do not activate device NFC.</p>
         </div></div>
       </section>
 
       <section className="career section" id="career" data-theme="amber">
-        <div className="content-width career__layout"><div className="career__copy reveal"><h2>Career support<br/><span>in development</span></h2><p>We’re developing help with résumés, profiles, and application materials. This service is not available yet.</p><div className="career-tags"><span>Résumés</span><span>Cover letters</span><span>Profiles</span><span>Application planning</span><span>Career portfolios</span></div><p className="career-note">When available, career materials should be reviewed and tailored to you. No service can guarantee an interview or job offer.</p></div><div className="career__visual reveal"><div className="career__document"><div className="doc-lines"><span/><span/><span/><i/><span/><span/><span/></div><div className="doc-highlight"><b>Make your<br/>experience<br/><em>clear.</em></b><i/></div><div className="doc-stamp">VERITEZ<br/>CAREER TOOLS</div></div><div className="career__orbit career__orbit--one"/><div className="career__orbit career__orbit--two"/></div></div>
+        <div className="content-width career__layout"><div className="career__copy reveal"><h2>Career support<br/><span>in development.</span></h2><p>We’re developing help with résumés, profiles, and application materials. This service is not available yet.</p><div className="career-tags"><span>Résumés</span><span>Cover letters</span><span>Profiles</span><span>Application planning</span><span>Career portfolios</span></div><p className="career-note">When available, career materials should be reviewed and tailored to you. No service can guarantee an interview or job offer.</p></div><div className="career__visual reveal"><div className="career__document"><div className="doc-lines"><span/><span/><span/><i/><span/><span/><span/></div><div className="doc-highlight"><b>Make your<br/>experience<br/><em>clear.</em></b><i/></div><div className="doc-stamp">VERITEZ<br/>CAREER TOOLS</div></div><div className="career__orbit career__orbit--one"/><div className="career__orbit career__orbit--two"/></div></div>
       </section>
 
       <section className="why section" id="why" data-theme="emerald">
-        <div className="content-width"><div className="section-heading reveal"><div><h2>The details matter</h2><p>Good design should make information easier to find and use.</p></div></div><div className="why-grid">
-          <article className="why-item reveal"><div className="why-item__icon"><Icon name="person"/></div><h3>Start with your needs</h3><p>We shape each project around the people it has to serve.</p></article>
-          <article className="why-item reveal"><div className="why-item__icon"><Icon name="link"/></div><h3>Connect online and in person</h3><p>A website, profile, and NFC product can lead people to the same place.</p></article>
-          <article className="why-item reveal"><div className="why-item__icon"><Icon name="spark"/></div><h3>Keep it practical</h3><p>Clear navigation and useful details matter more than extra features.</p></article>
-          <article className="why-item reveal"><div className="why-item__icon"><Icon name="shield"/></div><h3>Be clear about what’s possible</h3><p>We explain what a tool does and avoid promises about results.</p></article>
+        <div className="content-width"><div className="section-heading reveal"><div><h2>The details matter.</h2><p>Good design should make information easier to find and use.</p></div></div><div className="why-grid">
+          <article className="why-item reveal"><div className="why-item__icon"><Icon name="person"/></div><h3>Start with your needs.</h3><p>We shape each project around the people it has to serve.</p></article>
+          <article className="why-item reveal"><div className="why-item__icon"><Icon name="link"/></div><h3>Connect online and in person.</h3><p>A website, profile, and NFC product can lead people to the same place.</p></article>
+          <article className="why-item reveal"><div className="why-item__icon"><Icon name="spark"/></div><h3>Keep it practical.</h3><p>Clear navigation and useful details matter more than extra features.</p></article>
+          <article className="why-item reveal"><div className="why-item__icon"><Icon name="shield"/></div><h3>Be clear about what’s possible.</h3><p>We explain what a tool does and avoid promises about results.</p></article>
         </div></div>
       </section>
 
       <section className="process section" id="how-it-works" data-theme="green">
-        <div className="content-width"><div className="process__intro reveal"><h2>How we work</h2><p>From the first conversation to a finished website or NFC product.</p></div><div className="process-track">
-          <article className="process-step reveal"><div className="process-step__node"><span>01</span><i/></div><h3>Tell us what you need</h3><p>Describe your goals, who it’s for, and the problem you want to solve.</p></article>
-          <article className="process-step reveal"><div className="process-step__node"><span>02</span><i/></div><h3>Design and build</h3><p>We agree on the content and design, then build the site or product.</p></article>
-          <article className="process-step reveal"><div className="process-step__node"><span>03</span><i/></div><h3>Put it to work</h3><p>Share the finished result with the people it’s meant for.</p></article>
+        <div className="content-width"><div className="process__intro reveal"><h2>How we work.</h2><p>From the first conversation to a finished website or NFC product.</p></div><div className="process-track">
+          <article className="process-step reveal"><div className="process-step__node"><span>01</span><i/></div><h3>Tell us what you need.</h3><p>Describe your goals, who it’s for, and the problem you want to solve.</p></article>
+          <article className="process-step reveal"><div className="process-step__node"><span>02</span><i/></div><h3>Design and build.</h3><p>We agree on the content and design, then build the site or product.</p></article>
+          <article className="process-step reveal"><div className="process-step__node"><span>03</span><i/></div><h3>Put it to work.</h3><p>Share the finished result with the people it’s meant for.</p></article>
         </div></div>
       </section>
 
       <section className="faq section" id="faq" data-theme="blue">
-        <div className="content-width faq__layout"><div className="faq__intro reveal"><h2>Common questions</h2><p>Details about our websites, NFC products, and how to get in touch.</p></div><div className="faq-list reveal">{faqs.map(([question, answer], i) => <article className={`faq-item ${openFaq === i ? 'is-open' : ''}`} key={question}><h3><button type="button" aria-expanded={openFaq === i} aria-controls={`faq-answer-${i}`} onClick={() => setOpenFaq(openFaq === i ? null : i)}><span>{question}</span><i>{openFaq === i ? '−' : '+'}</i></button></h3><div className="faq-item__answer" id={`faq-answer-${i}`} hidden={openFaq !== i}><p>{answer}</p></div></article>)}</div></div>
+        <div className="content-width faq__layout"><div className="faq__intro reveal"><h2>Common questions.</h2><p>Details about our websites, NFC products, and how to get in touch.</p></div><div className="faq-list reveal">{faqs.map(([question, answer], i) => <article className={`faq-item ${openFaq === i ? 'is-open' : ''}`} key={question}><h3><button type="button" aria-expanded={openFaq === i} aria-controls={`faq-answer-${i}`} onClick={() => setOpenFaq(openFaq === i ? null : i)}><span>{question}</span><i>{openFaq === i ? '−' : '+'}</i></button></h3><div className="faq-item__answer" id={`faq-answer-${i}`} hidden={openFaq !== i}><p>{answer}</p></div></article>)}</div></div>
       </section>
 
       <section className="contact section" id="contact" data-theme="emerald">
-        <div className="content-width contact__layout"><div className="contact__copy reveal"><h2>Tell us about<br/><span>your project</span></h2><p>Use the form to prepare an email with your project details. You can review it before sending.</p><div className="contact__direct"><div><a href="mailto:mohammedayanmahmood@gmail.com">mohammedayanmahmood@gmail.com</a></div></div><div className="contact__note"><i/>Your message opens in your email app.</div></div>
+        <div className="content-width contact__layout"><div className="contact__copy reveal"><h2>Tell us about<br/><span>your project.</span></h2><p>Use the form to prepare an email with your project details. You can review it before sending.</p><div className="contact__direct"><div><a href="mailto:mohammedayanmahmood@gmail.com">mohammedayanmahmood@gmail.com</a></div></div><div className="contact__note"><i/>Your message opens in your email app.</div></div>
           <form className="contact-form glass-panel reveal" onSubmit={handleContact}>
             <div className="form-row"><label>Your name<input name="name" autoComplete="name" placeholder="How should we address you?" required/></label><label>Email address<input name="email" type="email" autoComplete="email" placeholder="you@example.com" required/></label></div>
             <label>What can we help with?<select name="service" defaultValue="" required><option value="" disabled>Choose a service</option><option>Business website</option><option>Personal website</option><option>NFC products</option><option>Career support (planned)</option><option>Something else</option></select></label>

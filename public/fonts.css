@@ -1,0 +1,4 @@
+/* Local use is permitted. A licensed webfont is required before self-hosting. */
+@font-face{font-family:'VeritEZ Segoe Light';src:local('Segoe UI Light'),local('SegoeUI-Light');font-style:normal;font-weight:300;font-display:swap}
+:root{--description-font:'VeritEZ Segoe Light','Segoe UI',ui-sans-serif,system-ui,-apple-system,Arial,sans-serif}
+p,.feature-list li{font-family:var(--description-font);font-weight:300}

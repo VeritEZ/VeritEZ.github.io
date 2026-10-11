@@ -1,6 +1,6 @@
 # VeritEZ website
 
-A responsive, single-page React and TypeScript site built with Vite. The visual system uses the supplied VeritEZ wordmark, emerald accents, geometric hexagons, CSS-based ambient lighting, and selected Vitrio liquid-glass rendering.
+A responsive, single-page React and TypeScript site built with Vite. The visual system uses the supplied VeritEZ wordmark, emerald accents, geometric hexagons, CSS ambient lighting, and live backdrop glass effects.
 
 ## Run locally
 
@@ -19,12 +19,16 @@ Create a production build with `npm run build`; preview the generated `dist` fol
 - The official path-based mark is `public/veritez-wordmark.svg`; the favicon and social preview are `public/favicon.svg` and `public/og-image.svg`.
 - Career support is labeled as in development. The form opens a prefilled email draft; it does not submit data to a server.
 
-## GitHub Pages
+## Description font
+
+Descriptions use Segoe UI Light at weight 300 when it is installed on the visitor’s device. `public/fonts.css` defines a local font face and a system fallback. The font is currently **not bundled**. Microsoft’s Windows font license does not permit copying or converting the installed font for web hosting. A separately licensed webfont file is required to finish self-hosting Segoe UI Light; see [Microsoft’s font FAQ](https://learn.microsoft.com/en-us/typography/fonts/font-faq#web).
+
+## GitHub Pages deployment
 
 The repository target is `https://github.com/VeritEZ/VeritEZ.github.io`. This is an organization-site repository, so Vite uses the root path (`base: '/'`). The workflow in `.github/workflows/deploy.yml` builds `dist` and deploys it with GitHub Pages Actions on pushes to `main` or a manual dispatch.
 
-In the repository, open **Settings / Pages** and choose **GitHub Actions** as the build and deployment source. Confirm the workflow succeeds before sharing `https://veritez.github.io/`. Deployment has not been verified from this workspace.
+The repository uses **GitHub Actions** as its Pages deployment source. Confirm the workflow succeeds and the live URL serves the matching production assets after each deployment.
 
 ## Third-party software
 
-The site uses [Vitrio](https://github.com/eamonliu/vitrio) for selective optical glass effects. It is MIT-licensed; see `THIRD_PARTY_NOTICES.md`. The component uses a CSS glass treatment where Vitrio is unavailable or disabled on mobile. Safari and iOS use Vitrio's documented approximation.
+[Vitrio](https://github.com/eamonliu/vitrio) remains an installed MIT-licensed dependency; see `THIRD_PARTY_NOTICES.md`. Current glass surfaces use native CSS backdrop filters so they respond to the content scrolling beneath them.
