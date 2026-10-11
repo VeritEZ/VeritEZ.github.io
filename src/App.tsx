@@ -22,11 +22,11 @@ const nav = [
   ['Solutions', '#solutions'], ['Products', '#products'], ['How it works', '#how-it-works'], ['About', '#about'],
 ]
 
-const services: { icon: IconName; number: string; title: string; blurb: string; link: string; tag?: string }[] = [
+const services: { icon: IconName; number: string; title: string; blurb: string; link: string }[] = [
   { icon: 'web', number: '01', title: 'Business websites', blurb: 'Clear, responsive websites that make it easier for customers to understand what you do and take the next step.', link: '#business' },
   { icon: 'person', number: '02', title: 'Personal websites', blurb: 'A considered digital home for your work, ideas, experience, and the opportunities you want to find.', link: '#personal' },
   { icon: 'signal', number: '03', title: 'NFC & smart networking', blurb: 'Tap-enabled cards and stands that connect a physical introduction to a useful digital destination.', link: '#products' },
-  { icon: 'spark', number: '04', title: 'Career support', blurb: 'Thoughtful help with résumés, profiles, and application materials as this service develops.', link: '#career', tag: 'Coming soon' },
+  { icon: 'spark', number: '04', title: 'Career support', blurb: 'Thoughtful help with résumés, profiles, and application materials as this service develops.', link: '#career' },
 ]
 
 const faqs = [
@@ -73,14 +73,12 @@ function HexScene() {
 }
 
 function NfcShowcase() {
-  const [tapped, setTapped] = useState(false)
-  return <div className={`nfc-stage ${tapped ? 'is-tapped' : ''}`}>
+  return <div className="nfc-stage" tabIndex={0} aria-label="NFC card and phone preview. Hover or focus to see the connection animation.">
     <div className="nfc-stage__halo" />
     <div className="nfc-card"><div className="nfc-card__top"><Wordmark/><span>01 / 04</span></div><div className="nfc-card__mark"><span className="nfc-card__hex"><Icon name="signal" size={17}/></span><span>Tap into<br/>opportunity.</span></div><div className="nfc-card__bottom"><span>VERITEZ DIGITAL ID</span><span>STUDIO EDITION</span></div></div>
     <div className="nfc-phone"><div className="nfc-phone__speaker"/><div className="nfc-phone__screen"><div className="profile-avatar">J</div><b>John Doe</b><span>Digital solutions · VeritEZ</span><i>Save contact</i><small>Portfolio&nbsp;&nbsp; LinkedIn&nbsp;&nbsp; Email</small></div></div>
     <div className="nfc-rings"><span/><span/><span/></div>
-    <button className="nfc-tap" type="button" onClick={() => setTapped(!tapped)} aria-pressed={tapped}><Icon name="signal" size={16}/>{tapped ? 'Reset demo' : 'Tap to preview'}</button>
-    <div className="nfc-caption">Illustrative interaction · no NFC hardware is activated</div>
+    <div className="nfc-caption">Hover or focus to preview · no NFC hardware is activated</div>
   </div>
 }
 
@@ -160,7 +158,6 @@ function App() {
           </div>
           <div className="hero__visual" aria-label="NFC card and phone interaction preview"><NfcShowcase/></div>
         </div>
-        <a className="scroll-cue" href="#about"><span>SCROLL TO EXPLORE</span><i/></a>
       </section>
 
       <section className="intro section" id="about" data-theme="emerald">
@@ -175,7 +172,6 @@ function App() {
           <div className="section-heading reveal"><div><h2>One connected set<br/><span>of possibilities.</span></h2><p>Start with what you need today. Build toward what comes next.</p></div></div>
           <div className="solution-grid">
             {services.map((service) => <a className="solution-card glass-panel reveal" href={service.link} key={service.number}>
-              <div className="solution-card__top">{service.tag && <span className="status-pill">{service.tag}</span>}</div>
               <div className="solution-card__icon"><Icon name={service.icon} size={27}/><div className="icon-halo"/></div>
               <div className="solution-card__body"><h3>{service.title}</h3><p>{service.blurb}</p></div>
               <span className="solution-card__watermark">{service.number}</span>
@@ -208,7 +204,7 @@ function App() {
       </section>
 
       <section className="career section" id="career" data-theme="amber">
-        <div className="content-width career__layout"><div className="career__copy reveal"><span className="coming-soon"><i/> COMING SOON</span><h2>Build the future<br/><span>you’re working toward.</span></h2><p>Career support is a planned expansion focused on practical, personal tools for presenting your experience and organizing your next steps.</p><div className="career-tags"><span>Résumé development</span><span>Cover letters</span><span>Profile improvement</span><span>Application planning</span><span>Career portfolios</span></div><p className="career-note">AI can support the process. Your final materials should always be reviewed and personalized. No interviews or job outcomes are guaranteed.</p></div><div className="career__visual reveal"><div className="career__document"><div className="doc-lines"><span/><span/><span/><i/><span/><span/><span/></div><div className="doc-highlight"><b>Make your<br/>experience<br/><em>understood.</em></b><i/></div><div className="doc-stamp">VERITEZ<br/>CAREER TOOLS</div></div><div className="career__orbit career__orbit--one"/><div className="career__orbit career__orbit--two"/></div></div>
+        <div className="content-width career__layout"><div className="career__copy reveal"><h2>Build the future<br/><span>you’re working toward.</span></h2><p>Career support is a planned expansion focused on practical, personal tools for presenting your experience and organizing your next steps.</p><div className="career-tags"><span>Résumé development</span><span>Cover letters</span><span>Profile improvement</span><span>Application planning</span><span>Career portfolios</span></div><p className="career-note">AI can support the process. Your final materials should always be reviewed and personalized. No interviews or job outcomes are guaranteed.</p></div><div className="career__visual reveal"><div className="career__document"><div className="doc-lines"><span/><span/><span/><i/><span/><span/><span/></div><div className="doc-highlight"><b>Make your<br/>experience<br/><em>understood.</em></b><i/></div><div className="doc-stamp">VERITEZ<br/>CAREER TOOLS</div></div><div className="career__orbit career__orbit--one"/><div className="career__orbit career__orbit--two"/></div></div>
       </section>
 
       <section className="why section" id="why" data-theme="emerald">
