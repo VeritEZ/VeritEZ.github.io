@@ -177,11 +177,11 @@ function App() {
             <h1 className="reveal">Your next opportunity<br/><span>starts here.</span></h1>
             <p className="hero__lead reveal">Websites, smart networking products, and AI-assisted digital solutions designed to help you connect, grow, and stand out.</p>
             <div className="hero__actions reveal"><ButtonLink href="#solutions">Explore solutions</ButtonLink></div>
-            <div className="hero__tagline reveal"><span className="tagline-line"/>Tap Into Opportunity.</div>
+            <div className="hero__tagline reveal">Tap Into Opportunity.</div>
           </div>
           <div className="hero__visual" aria-label="VeritEZ identity with an NFC wave interaction">
             <div className="hero-core" tabIndex={0} role="img" aria-label="VeritEZ mark. Hover or focus to preview the NFC connection wave." onPointerEnter={(event) => event.currentTarget.classList.add('is-active')} onPointerLeave={(event) => event.currentTarget.classList.remove('is-active')} onFocus={(event) => event.currentTarget.classList.add('is-active')} onBlur={(event) => event.currentTarget.classList.remove('is-active')}>
-              <div className="hero-core__inner"><Wordmark className="hero-core__wordmark"/><span className="hero-core__caption">Tap Into Opportunity.</span></div>
+              <div className="hero-core__inner"><Wordmark className="hero-core__wordmark"/></div>
             </div>
             <div className="hero-core__waves" aria-hidden="true"><i/><i/><i/></div>
           </div>
