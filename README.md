@@ -21,7 +21,7 @@ Create a production build with `npm run build`; preview the generated `dist` fol
 
 ## Description font
 
-Descriptions use Segoe UI Light at weight 300 when it is installed on the visitor’s device. `public/fonts.css` defines a local font face and a system fallback. The font is currently **not bundled**. Microsoft’s Windows font license does not permit copying or converting the installed font for web hosting. A separately licensed webfont file is required to finish self-hosting Segoe UI Light; see [Microsoft’s font FAQ](https://learn.microsoft.com/en-us/typography/fonts/font-faq#web).
+Descriptions use bundled Selawik Light at weight 300, an open-source alternative to Segoe UI. The unmodified WOFF2 comes from [Microsoft’s official Selawik 1.01 release](https://github.com/microsoft/Selawik/releases/tag/1.01). It is self-hosted at `public/fonts/selawik-light.woff2` and preloaded on both pages. `public/fonts.css` defines the font face and system fallbacks. No third-party font service or locally installed font is required. The SIL Open Font License and copyright notice are included at `public/fonts/Selawik-OFL.txt`.
 
 ## GitHub Pages deployment
 
